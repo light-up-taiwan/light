@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>管理｜點亮台灣</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#070b14;--ink:#e9eef7;--mute:#8592a8;--glow:#ffd36a;--accent:#7be0a5;--card:#111827;--line:#1f2a3d;--warn:#ff8a8a}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:20px 16px 40px}
+  h1{font-size:20px;margin:0 0 16px}
+  h2{font-size:15px;color:var(--mute);font-weight:500;margin:22px 0 10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+  input,select{background:#0b1220;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:16px}
+  .btn{background:var(--glow);color:#1a1300;border:0;border-radius:10px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn.danger{background:#5a1d1d;color:#ffd5d5}
+  .btn.ok{background:#1d4a33;color:#d6ffe6}
+  .login{max-width:360px;margin:60px auto;display:flex;flex-direction:column;gap:10px}
+  .err{color:var(--warn);font-size:13px;min-height:18px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{text-align:center;padding:16px 8px}
+  .stat b{display:block;font-size:26px;color:var(--glow);font-variant-numeric:tabular-nums}
+  .stat span{font-size:12px;color:var(--mute)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .src{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .src:last-child{border:0}
+  .bars{display:flex;align-items:flex-end;gap:4px;height:120px}
+  .bars div{flex:1;background:var(--glow);border-radius:3px 3px 0 0;min-height:2px;position:relative}
+  .bars div span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--mute);white-space:nowrap}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .tabs button{background:none;border:0;color:var(--mute);font:inherit;padding:8px 10px;cursor:pointer;border-bottom:2px solid transparent}
+  .tabs button.on{color:var(--ink);border-color:var(--glow)}
+  .item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .item .body{flex:1;min-width:0}
+  .item .t{font-size:15px;line-height:1.6;word-break:break-word}
+  .item .m{font-size:12px;color:var(--mute);margin-top:4px}
+  .item .acts{display:flex;gap:6px;flex-shrink:0}
+  .tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:20px;border:1px solid var(--line);margin-right:6px}
+  .tag.pending{color:var(--glow);border-color:var(--glow)}
+  .tag.removed{color:var(--warn);border-color:var(--warn)}
+  .tag.approved{color:var(--accent);border-color:var(--accent)}
+  .empty{color:var(--mute);padding:20px 0;text-align:center}
+  @media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.item{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="loginView" class="login card" hidden>
+    <h1>管理者登入</h1>
+    <input id="email" type="email" placeholder="Email" autocomplete="username">
+    <input id="pw" type="password" placeholder="密碼" autocomplete="current-password">
+    <div id="ts"></div>
+    <button class="btn" id="loginBtn">登入</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+
+  <div id="adminView" hidden>
+    <div class="tools" style="justify-content:space-between">
+      <h1>點亮台灣・管理</h1>
+      <button class="btn ghost" id="logout">登出</button>
+    </div>
+
+    <div class="stats">
+      <div class="card stat"><b id="sTotal">–</b><span>總留言（盞燈）</span></div>
+      <div class="card stat"><b id="sToday">–</b><span>今天新增</span></div>
+      <div class="card stat"><b id="sPending">–</b><span>待處理</span></div>
+      <div class="card stat"><b id="sRemoved">–</b><span>已移除</span></div>
+    </div>
+
+    <h2>流量與來源</h2>
+    <div class="two">
+      <div class="card"><div style="font-size:13px;color:var(--mute);margin-bottom:8px">近 14 天每日留言</div><div class="bars" id="daily"></div><div style="height:20px"></div></div>
+      <div class="card"><div style="font-size:13px;color:var(--mute);margin-bottom:8px">留言者從哪裡來</div><div id="sources"></div></div>
+    </div>
+
+    <h2>檢舉門檻</h2>
+    <div class="card tools">
+      <span>被</span><input id="th" type="number" min="1" max="1000" style="width:90px"><span>個不同的人檢舉，就先暫時隱藏</span>
+      <button class="btn ghost" id="thSave">儲存</button><span class="err" id="thMsg"></span>
+    </div>
+
+    <h2>留言</h2>
+    <div class="card">
+      <div class="tools" style="justify-content:space-between">
+        <div class="tabs" id="tabs">
+          <button data-s="pending" class="on">待處理</button><button data-s="all">全部</button>
+          <button data-s="approved">已保留</button><button data-s="removed">已移除</button>
+        </div>
+        <div class="tools"><input id="q" placeholder="搜尋文字或燈號" style="width:180px"><button class="btn ghost" id="qBtn">搜尋</button></div>
+      </div>
+      <div id="items"></div>
+      <div class="tools" style="justify-content:center;margin-top:10px"><button class="btn ghost" id="more" hidden>載入更多</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
