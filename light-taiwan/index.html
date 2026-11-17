@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>點亮台灣｜寫一句話給黃仁勳</title>
+<meta name="description" content="每一句話，是一盞燈。寫一句話給黃仁勳，一起把台灣點亮。">
+<meta property="og:title" content="點亮台灣｜寫一句話給黃仁勳">
+<meta property="og:description" content="每一句話，是一盞燈。當每個角落都被點亮，就是整個台灣想對他說的話。">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070b14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#070b14;--ink:#e9eef7;--mute:#8592a8;--glow:#ffd36a;--accent:#7be0a5;--card:#111827;--line:#1f2a3d;--warn:#ff8a8a}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+  body{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+    background:radial-gradient(ellipse at 50% 25%,#13203a 0%,var(--bg) 65%) fixed}
+  header{text-align:center;padding:6px 18px 6px;max-width:640px}
+  h1{font-size:clamp(22px,5.6vw,36px);margin:0 0 8px;letter-spacing:.04em;font-weight:700}
+  h1 span{color:var(--glow);text-shadow:0 0 18px rgba(255,211,106,.55)}
+  .sub{color:var(--mute);font-size:14px;line-height:1.7;margin:0}
+  .count{margin-top:14px;font-size:15px}
+  .count b{color:var(--glow);font-size:22px;font-variant-numeric:tabular-nums}
+  .why{margin:16px auto 4px;max-width:520px;text-align:left;background:rgba(17,24,39,.6);border:1px solid var(--line);border-radius:12px;padding:14px 16px 4px}
+  .why summary{cursor:pointer;padding:10px 0;color:var(--glow);font-size:14px;text-align:center;list-style:none}
+  .why summary::-webkit-details-marker{display:none}
+  .why summary::after{content:" ▾"}
+  .why[open] summary::after{content:" ▴"}
+  .why p{font-size:14px;line-height:1.8;color:#c5cede;margin:0 0 10px}
+  .topbar{width:100%;display:flex;justify-content:flex-end;padding:10px 12px 0}
+  .langbar{display:flex;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:rgba(7,11,20,.7)}
+  .lt button{background:none;border:0;color:var(--mute);font:inherit;font-size:12px;padding:3px 10px;cursor:pointer}
+  .lt button.on{background:var(--glow);color:#1a1300;font-weight:700}
+  body[data-lang=zh] .why [lang=en],body[data-lang=en] .why [lang=zh]{display:none}
+  .why .sep{border:0;border-top:1px solid var(--line);margin:14px 0}
+  .why [lang=en] p{font-size:13px;line-height:1.7;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#aeb8ca}
+  .why .credit{font-size:12px;color:var(--mute)}
+  .why a{color:var(--mute)}
+  .goal{font-size:12px;color:var(--mute);margin-top:8px}
+  .bar{height:6px;background:#1a2438;border-radius:6px;margin:10px auto 0;max-width:320px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb84d,var(--glow));box-shadow:0 0 10px var(--glow);transition:width .6s}
+  .main{width:100%;display:flex;flex-direction:column;align-items:center}
+  .left,.right{width:100%;display:flex;flex-direction:column;align-items:center}
+  .stage{position:relative;width:min(92vw,460px);aspect-ratio:.62;margin:6px auto 0}
+  canvas#cv{width:100%;height:100%;display:block;cursor:pointer;touch-action:manipulation}
+  .tip{position:absolute;z-index:5;width:250px;background:rgba(17,24,39,.97);border:1px solid var(--line);border-radius:12px;
+    padding:12px 14px;font-size:14px;line-height:1.6;box-shadow:0 8px 28px rgba(0,0,0,.5);display:none}
+  .tip.show{display:block}
+  .tip .no{color:var(--mute);font-size:12px}
+  .who{color:var(--glow);font-size:12px;margin-top:4px}
+  .tip .acts{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .linkbtn{background:none;border:0;color:var(--mute);font:inherit;font-size:12px;padding:4px 0;cursor:pointer;text-decoration:underline}
+  .linkbtn:hover{color:var(--ink)}
+  form,.panel{width:min(92vw,460px);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px auto 10px}
+  form{display:flex;flex-direction:column;gap:10px}
+  label{font-size:13px;color:var(--mute)}
+  textarea,input{width:100%;background:#0b1220;color:var(--ink);border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;font:inherit;font-size:16px;resize:none}
+  textarea:focus,input:focus{outline:none;border-color:var(--glow)}
+  .row{display:flex;gap:10px;align-items:center}
+  .row input{flex:1;min-width:0}
+  .btn{background:var(--glow);color:#1a1300;border:0;border-radius:10px;padding:11px 18px;font:inherit;font-weight:700;font-size:16px;cursor:pointer;white-space:nowrap}
+  .btn:disabled{opacity:.45;cursor:default}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .hint{font-size:12px;color:var(--mute);display:flex;justify-content:space-between}
+  .status{font-size:13px;color:var(--accent);min-height:18px}
+  .status.err{color:var(--warn)}
+  .mine{display:none;gap:10px}
+  .mine.show{display:flex}
+  .mine .btn{flex:1}
+  details{width:min(92vw,460px);margin:0 auto;color:var(--mute);font-size:13px;line-height:1.7}
+  summary{cursor:pointer;padding:6px 4px}
+  details ul{margin:4px 0 8px;padding-left:22px}
+  .feed{width:min(92vw,460px);margin:6px auto 30px}
+  .feed h2{font-size:15px;color:var(--mute);font-weight:500;margin:12px 4px}
+  .msg{border-left:3px solid var(--glow);padding:6px 12px;margin:10px 0;font-size:15px;line-height:1.6}
+  .msg small{display:flex;justify-content:space-between;color:var(--mute);font-size:12px}
+  footer{color:#4c5870;font-size:12px;padding:0 16px 28px;text-align:center}
+  .demo{width:100%;background:#3a2d00;color:var(--glow);font-size:12px;text-align:center;padding:4px;z-index:50}
+  /* 對話框 */
+  .modal{position:fixed;inset:0;background:rgba(3,6,12,.82);display:none;align-items:center;justify-content:center;z-index:40;padding:16px}
+  .modal.show{display:flex}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;width:min(100%,420px);max-height:92vh;overflow:auto;text-align:center}
+  .box h3{margin:0 0 8px;font-size:17px}
+  .box p{color:var(--mute);font-size:14px;line-height:1.6;margin:0 0 12px}
+  .box img{width:100%;border-radius:12px;display:block;margin:0 auto 12px}
+  .box .row{justify-content:center;flex-wrap:wrap}
+  #ts{display:flex;justify-content:center;min-height:70px;margin:8px 0}
+  @media (min-width:900px){
+    header{max-width:900px;padding-top:12px}
+    .main{display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:1080px;padding:0 32px;align-items:start}
+    .left{position:sticky;top:20px}
+    .stage{width:min(100%,calc((100vh - 250px)*.62));min-width:300px}
+    form,.feed,details{width:100%}
+    form{margin-top:6px}
+    #list{max-height:calc(100vh - 460px);min-height:200px;overflow:auto;padding-right:6px}
+  }
+</style>
+</head>
+<body data-lang="zh">
+<div class="demo" id="demo" hidden data-i18n="demo">示範模式：目前是假資料，填好 js/config.js 後就會連上正式資料庫</div>
+<div class="topbar"><div class="langbar lt" role="group" aria-label="語言 Language"><button type="button" data-l="zh">中</button><button type="button" data-l="en">EN</button></div></div>
+
+<header>
+  <h1 data-i18n-html="h1">寫一句話給黃仁勳，<span>點亮台灣</span></h1>
+  <p class="sub" data-i18n-html="sub">每一句話，是一盞燈。<br>當每個角落都被點亮，就是整個台灣想對他說的話。</p>
+  <section class="why">
+    <div class="txt" lang="zh">
+      <p>黃仁勳在演講說過，台灣是「無名的英雄，卻是世界的支柱」，輝達的海外總部也決定蓋在台灣。</p>
+      <p>最近的新聞大家都看到了。到底發生了什麼，我們不知道，調查也還沒有結果。但身為台灣人，還是想做點什麼。</p>
+      <p>我跟他沒什麼直接的關係，能做的，就是把大家想跟他說的話集中起來。剛好最近在玩 AI，就試著用 AI 做了這個網頁：每個人留一句話給他，一句點亮一個點，看最後能不能把整個台灣點亮。</p>
+      <p>一個普通人能做出這種東西，是因為有輝達、有這些科技公司把 AI 做出來。我覺得這就是 AI 給的力量。</p>
+      <p>對了，我自己也有買一點輝達。這不是官方活動，就只是一個台灣人做的小東西。</p>
+    </div>
+    <div class="txt" lang="en">
+      <p>Jensen Huang once said in a keynote that Taiwan is the unsung hero, and a pillar of the world. NVIDIA is building its overseas headquarters here, too.</p>
+      <p>We've all seen the recent news. What really happened, we don't know, and the investigation isn't over. But as a Taiwanese, I still wanted to do something.</p>
+      <p>I have no direct connection to him. What I can do is gather what people want to say to him in one place. I've been playing with AI lately, so I used it to build this page: everyone leaves him one line, each line lights up one dot, and we'll see if we can light up all of Taiwan.</p>
+      <p>A regular person can build something like this because NVIDIA and other tech companies made AI possible. To me, that's the power AI gives us.</p>
+      <p>Full disclosure: I own a little NVIDIA stock. This isn't an official event, just something one Taiwanese person made.</p>
+    </div>
+  </section>
+  <div class="count" id="countline">已點亮 <b id="lit">0</b> 盞，還差 <span id="left">0</span> 盞就能亮滿全台</div>
+  <div class="bar"><i id="barfill"></i></div>
+  <div class="goal" id="goal" data-i18n="goal_pre">目標 1,963 盞，他出生的那一年</div>
+</header>
+
+<main class="main">
+  <div class="left">
+    <div class="stage" id="stage">
+      <canvas id="cv" aria-label="台灣地圖，每個亮點是一則留言"></canvas>
+      <div class="tip" id="tip"></div>
+    </div>
+  </div>
+
+  <div class="right">
+    <form id="f" autocomplete="off">
+      <label for="msg" data-i18n="label">你想對黃仁勳說什麼？</label>
+      <textarea id="msg" rows="3" maxlength="80" data-i18n-ph="ph_msg" placeholder="一句就好，例如：謝謝你讓世界看見台灣。"></textarea>
+      <div class="hint"><span data-i18n="hint">一人一盞燈，之後還可以修改</span><span id="len">0 / 80</span></div>
+      <div class="row">
+        <input id="sig" maxlength="20" data-i18n-ph="ph_sig" placeholder="署名（可留空，例如：新竹的阿明）">
+        <button class="btn" id="btn" type="submit" disabled>點亮我的燈</button>
+      </div>
+      <div class="status" id="status">連線中…</div>
+      <div class="mine" id="mineActs">
+        <button class="btn ghost" type="button" id="shareBtn" data-i18n="share_mine">分享我的燈</button>
+        <button class="btn ghost" type="button" id="copyBtn" data-i18n="copy">複製網址</button>
+      </div>
+    </form>
+
+    <details>
+      <summary data-i18n="rules_t">留言規則</summary>
+      <ul data-i18n-html="rules"></ul>
+    </details>
+
+    <section class="feed">
+      <h2 data-i18n="feed">剛剛被點亮的燈</h2>
+      <div id="list"></div>
+    </section>
+  </div>
+</main>
+<footer data-i18n="footer">非官方粉絲留言活動，與輝達公司無關・點地圖上任一盞燈，看看別人說了什麼</footer>
+
+<!-- 人機驗證 -->
+<div class="modal" id="verify">
+  <div class="box">
+    <h3 data-i18n="v_h">先確認你不是機器人</h3>
+    <p data-i18n="v_p">只需要做一次，之後留言或檢舉都不用再驗證。</p>
+    <div id="ts"></div>
+    <button class="btn ghost" type="button" id="verifyCancel" data-i18n="cancel">取消</button>
+  </div>
+</div>
+
+<!-- 分享卡 -->
+<div class="modal" id="shareModal">
+  <div class="box">
+    <h3 data-i18n="s_h">你的燈亮了！</h3>
+    <p id="shareHint">分享出去，邀更多人一起點亮台灣。</p>
+    <img id="cardImg" alt="我的點亮台灣分享卡">
+    <div class="row">
+      <button class="btn" type="button" id="doShare" data-i18n="share">分享</button>
+      <a class="btn ghost" id="dlCard" download="點亮台灣.png" style="text-decoration:none" data-i18n="dl">下載圖片</a>
+      <button class="btn ghost" type="button" id="shareClose" data-i18n="close">關閉</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/taiwan.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/i18n.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
